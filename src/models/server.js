@@ -14,6 +14,7 @@ class Server {
 
         this.paths = {
             auth: '/api/auth',
+            users: '/api/users'
 
         };
 
@@ -22,7 +23,6 @@ class Server {
         this.routes();  
 
     }
-
 
     middleware(){
         //CORS 
@@ -38,6 +38,7 @@ class Server {
 
     routes(){
         this.app.use( this.paths.auth, require('../router/auth.routes') );
+        this.app.use( this.paths.users, require('../router/users.routes') );
     }
 
 

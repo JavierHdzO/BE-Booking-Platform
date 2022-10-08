@@ -19,7 +19,8 @@ const userSchema = new Schema({
     role:{
         type: String,
         required: [true, 'Role is required'],
-        enum: ['ADMIN_AITECH_ROLE', 'USER_MODERADOR_ROLE']
+        enum: ['ADMIN_AITECH_ROLE', 'USER_MODERADOR_ROLE'],
+        default: 'USER_MODERADOR_ROLE'
     },
     status:{
         type: Boolean,
@@ -28,20 +29,22 @@ const userSchema = new Schema({
 
 });
 
-userSchema.method.toJSON = function(){
-    const { __v, password, _id, ...user } = this.toJSON();
+userSchema.methods.toJSON = function(){
+    const { __v, password, _id, ...user } = this.toObject();
     user['uid'] = _id;
     return user;
 }
 
-userSchema.methods.encryptPassword = async() => {
-    
+userSchema.methods.encryptPassword = async( password ) => {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash( password, salt )
+
+    return hash
 }
 
 userSchema.methods.comparePassword = async function( password ){
     return await bcrypt.compare( password, this.password );
 }
-
 
 
 module.exports = model( 'User', userSchema )

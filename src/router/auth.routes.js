@@ -5,6 +5,6 @@ const router = Router();
 
 
 /** This get method will be deleted or changed to post method */
-router.get( '/signin', signIn );
+router.post( '/signin', signIn );
 
 module.exports = router
