@@ -29,12 +29,12 @@ const signIn = async(req = request, res = response) =>{
         const token = await generateJWT( user.uid );
     
         // Response 200 status with the user found and him token 
+        db.disconnect();
         res.json({
             user,
             token
         });
 
-        db.disconnect();
     } catch (error) {
         console.error(error);
         db.disconnect();
