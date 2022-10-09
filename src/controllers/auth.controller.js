@@ -28,33 +28,29 @@ const signIn = async(req = request, res = response) =>{
         });
         
         // generate jwt, if user exists 
-        const token = await generateJWT( user.uid );
-        
+        const token = await generateJWT( user._id );
+    
         // waiting for disconnection to db
         await db.disconnect();
         
         // Response 200 status with the user found and him token 
         res.json({
             user,
-            token
+            token,
+            ok:true
         });
 
     } catch (error) {
         console.error(error);
         await db.disconnect();
         res.status(500).json({
-            msg: error,
+            msg: 'Report issue to the admin',
             ok:false
         });
     }
 
 }
 
-const signOut = async( req, res = response) => {
-
-}
-
 module.exports = {
-    signIn,
-    signOut
+    signIn   
 }
