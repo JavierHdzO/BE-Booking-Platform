@@ -1,5 +1,9 @@
-const validateFields = require('./validationFields');
+const validateFields    = require('./validationFields');
+const validateJWT       = require('./validateJWT');
+const validateRole      = require('./validateRole');
 
 module.exports = {
-    validateFields
+    validateFields,
+    ...validateJWT,
+    ...validateRole
 }

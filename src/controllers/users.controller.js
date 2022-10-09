@@ -67,7 +67,7 @@ const updateUser = async(req = request, res = response) => {
 }
 
 const deleteUser = async(req = request, res = response) => {
-
+    res.json('ok');
 }
 
 
