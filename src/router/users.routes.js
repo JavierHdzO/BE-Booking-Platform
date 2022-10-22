@@ -25,7 +25,8 @@ router.post('/',[
     check('last_name', 'Lastname is required').not().isEmpty(),
     check('password', 'Password must be at least 8 characters').isLength( {min:8} ),
     check('email', 'Email is required').isEmail(),
-    body( 'access_code', 'AccessCode is required').custom( existAccessCode ),
+    check('email', 'Email has been registered').custom( existsEmailValidator ),
+    check('access_code', 'AccessCode is required').custom( existAccessCode ),
     validateFields
 ], createUser);
 
