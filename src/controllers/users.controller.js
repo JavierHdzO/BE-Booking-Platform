@@ -16,8 +16,15 @@ const createUser = async(req = request, res = response) => {
         
         await db.disconnect();
 
+        tempUser = user.toJSON()
+        delete tempUser.status;
+        delete tempUser.role;
+        delete tempUser.uid;
+
+        console.log( tempUser );
+
         res.json({
-            user,
+            user: tempUser,
             ok:true
         });
         

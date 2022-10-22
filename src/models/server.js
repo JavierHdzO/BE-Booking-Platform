@@ -7,6 +7,7 @@ const cors      = require('cors');
 
 class Server {
 
+    
     constructor(){
 
         this.app    = express();
@@ -14,7 +15,8 @@ class Server {
 
         this.paths = {
             auth: '/api/auth',
-            users: '/api/users'
+            users: '/api/users',
+            code: '/api/code'
 
         };
 
@@ -39,6 +41,7 @@ class Server {
     routes(){
         this.app.use( this.paths.auth, require('../router/auth.routes') );
         this.app.use( this.paths.users, require('../router/users.routes') );
+        this.app.use( this.paths.code, require('../router/accesscode.routes') );
     }
 
 

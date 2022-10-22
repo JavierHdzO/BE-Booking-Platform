@@ -1,5 +1,5 @@
 const DB = require("../database/config");
-const { User } = require("../models/");
+const { User, AccessCode } = require("../models/");
 
 const existsEmailValidator = async (email) => {
   const db = new DB();
@@ -29,7 +29,26 @@ const existsUserById = async (id) => {
     }
 };
 
+const existAccessCode = async ( code ) => {
+
+    const db =  new DB();
+
+    try {
+      await db.connect();
+      const access = await AccessCode.findOne({ code, status: true });
+      await db.disconnect();
+
+      if( !access )
+        throw new Error("Access Code has been expired");
+      
+    } catch (error) {
+      throw new Error("Report this assue to the admin");
+    }
+}
+
+
 module.exports = {
   existsEmailValidator,
-  existsUserById
+  existsUserById,
+  existAccessCode
 };
