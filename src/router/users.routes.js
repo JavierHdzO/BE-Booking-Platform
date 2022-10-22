@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
+const { check, body } = require('express-validator');
 
 const { validateJWT, 
         isAdmin, 
@@ -7,7 +7,8 @@ const { validateJWT,
         validateFields } = require('../middlewares/');
 
 const { existsEmailValidator, 
-        existsUserById } = require('../helpers/');
+        existsUserById, 
+        existAccessCode} = require('../helpers/');
 
 const { createUser, 
         getUser, 
@@ -16,15 +17,15 @@ const { createUser,
         deleteUser } = require('../controllers/');
 
 
-        
-
+    
 const router = Router();
 
 router.post('/',[
     check('name', 'Name is required').not().isEmpty(),
+    check('last_name', 'Lastname is required').not().isEmpty(),
     check('password', 'Password must be at least 8 characters').isLength( {min:8} ),
-    check('email', 'Email os required').isEmail(),
-
+    check('email', 'Email is required').isEmail(),
+    body( 'access_code', 'AccessCode is required').custom( existAccessCode ),
     validateFields
 ], createUser);
 

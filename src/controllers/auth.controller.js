@@ -34,8 +34,13 @@ const signIn = async(req = request, res = response) =>{
         await db.disconnect();
         
         // Response 200 status with the user found and him token 
+        tempUser = user.toJSON()
+        delete tempUser.status;
+        delete tempUser.role;
+        delete tempUser.uid;
+
         res.json({
-            user,
+            user: tempUser,
             token,
             ok:true
         });
