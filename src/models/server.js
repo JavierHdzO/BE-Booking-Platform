@@ -16,7 +16,8 @@ class Server {
         this.paths = {
             auth: '/api/auth',
             users: '/api/users',
-            code: '/api/code'
+            code: '/api/code',
+            token: '/api/token'
 
         };
 
@@ -42,6 +43,7 @@ class Server {
         this.app.use( this.paths.auth, require('../router/auth.routes') );
         this.app.use( this.paths.users, require('../router/users.routes') );
         this.app.use( this.paths.code, require('../router/accesscode.routes') );
+        this.app.use( this.paths.token, require('../router/token.routes') );
     }
 
 

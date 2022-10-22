@@ -32,6 +32,8 @@ const validateJWT = async (req = request, res, next) => {
     req.authUser = user;
     req.uid = uid;
 
+    await db.disconnect();
+
     next();
 
   } catch (error) {
@@ -39,7 +41,7 @@ const validateJWT = async (req = request, res, next) => {
     console.error(error);
 
     res.status(500).json({
-        msg: 'Report issue to the admin',
+        msg: `Token missing or incorrect`,
         ok:false
     });
   }
