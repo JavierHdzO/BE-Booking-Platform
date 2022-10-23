@@ -23,6 +23,9 @@ const router = Router();
 router.post('/',[
     check('name', 'Name is required').not().isEmpty(),
     check('last_name', 'Lastname is required').not().isEmpty(),
+    check('rfc', 'RFC is required').not().isEmpty(),
+    check('phone', 'Phone is required').not().isEmpty(),
+    check('phone', 'Phone must be a numer').isNumeric(),
     check('password', 'Password must be at least 8 characters').isLength( {min:8} ),
     check('email', 'Email is required').isEmail(),
     check('email', 'Email has been registered').custom( existsEmailValidator ),
