@@ -11,6 +11,14 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    rfc:{
+        type: String,
+        required: true
+    },
+    phone:{
+        type: String,
+        required: true
+    },
     email:{
         type: String,
         required: true,
