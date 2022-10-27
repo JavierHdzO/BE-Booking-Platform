@@ -1,4 +1,4 @@
-const role = require("../models/role");
+const { Role } = require("../models");
 
 
 const isAdmin = (req, res, next) => {
@@ -23,7 +23,7 @@ const checkRole = (...roles) => {
     return (req, res, next) => {
 
         if( !req.authUser ) return res.status(400).json({
-            msg:'Does not have required permissions',
+            msg:'User does not have required permissions',
             ok: false
         });
 
