@@ -19,6 +19,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    profile:{
+        type: String,
+        required: false
+    },
     email:{
         type: String,
         required: true,
