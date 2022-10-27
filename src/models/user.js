@@ -35,8 +35,8 @@ const userSchema = new Schema({
     role:{
         type: String,
         required: [true, 'Role is required'],
-        enum: ['ADMIN_AITECH_ROLE', 'USER_MODERADOR_ROLE'],
-        default: 'USER_MODERADOR_ROLE'
+        enum: ['ADMIN_AITECH_ROLE', 'USER_MODERATOR_ROLE'],
+        default: 'USER_MODERATOR_ROLE'
     },
     status:{
         type: Boolean,
