@@ -1,8 +1,12 @@
 const { request, response } = require('express');
-const database        = require('../database/config');
-const { User }  = require('../models');
 
-const { uploadFile, removeFile } = require('../helpers');
+const database  = require('../database/config');s
+const { User }  = require('../models');
+const { uploadLocalFile, 
+        removeCloudinaryFile, 
+        removeLocalFile, 
+        uploadCloudinaryFile } = require('../helpers');
+
 
 const createUser = async(req = request, res = response) => {
     const { status, role, ...data } = req.body;
@@ -86,8 +90,8 @@ const deleteUser = async(req = request, res = response) => {
 const uploadImageProfile = async(req, res) => {
 
     try {
-        const name = await uploadFile( req.files, undefined , 'users' );
-
+        const name = await uploadLocalFile( req.files, undefined , 'users' );
+        
         res.json({
             name,
             ok:true
@@ -114,14 +118,16 @@ const updateImageProfile = async(req, res) => {
 
         const user = await User.findById(uid);
 
-        /**
-         * Remove file from server
-         */
-        removeFile(user.profile, 'users');
+        await removeCloudinaryFile(user.profile);
 
-        const name = await uploadFile( req.files, undefined , 'users' );
+        const {temporalName, uploadPath} = await uploadLocalFile( req.files, undefined , 'users' );
+        
+        const  secure_url  = await uploadCloudinaryFile( uploadPath );
 
-        user.profile = name;
+        user.profile = secure_url;
+        
+        removeLocalFile(temporalName, 'users');
+
         await user.save();
         
         await db.disconnect();
@@ -131,8 +137,8 @@ const updateImageProfile = async(req, res) => {
          */
 
         res.json({
-            user,
-            ok:true
+            url: secure_url,
+            ok: true
         });
         
     } catch (error) {
