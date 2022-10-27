@@ -39,20 +39,19 @@ router.post('/',[
 
 router.get('/:id',[
     validateJWT,
-    checkRole('ADMIN_AITECH_ROLE', 'USER_MODERADOR_ROLE'),
+    checkRole(),
 ],getUser);
 
 
 router.get('/',[
     validateJWT,
-    checkRole('ADMIN_AITECH_ROLE', 'USER_MODERADOR_ROLE'),
-    
+    isAdmin,
 ], getUsers);
 
 
 router.put('/:id',[
     validateJWT,
-    checkRole('ADMIN_AITECH_ROLE', 'USER_MODERADOR_ROLE'),
+    checkRole(),
     check('id', 'Id is incorrect').isMongoId(),
     validateFields
 ], updateUser);

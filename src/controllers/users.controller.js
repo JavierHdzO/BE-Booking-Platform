@@ -1,6 +1,6 @@
 const { request, response } = require('express');
 
-const database  = require('../database/config');s
+const database  = require('../database/config');
 const { User }  = require('../models');
 const { uploadLocalFile, 
         removeCloudinaryFile, 
@@ -56,7 +56,7 @@ const getUsers = async(req = request, res = response) => {
     const db = new database();
     try {
         await db.connect();
-        const users = await User.find();
+        const users = await User.find({role:'USER_MODERADOR_ROLE'});
         await db.disconnect();
 
         res.json({
