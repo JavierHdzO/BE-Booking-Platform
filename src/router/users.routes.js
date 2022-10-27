@@ -4,7 +4,8 @@ const { check, body } = require('express-validator');
 const { validateJWT, 
         isAdmin, 
         checkRole, 
-        validateFields } = require('../middlewares/');
+        validateFields,
+        validateFile } = require('../middlewares/');
 
 const { existsEmailValidator, 
         existsUserById, 
@@ -13,7 +14,9 @@ const { existsEmailValidator,
 const { createUser, 
         getUser, 
         getUsers, 
-        updateUser, 
+        updateUser,
+        uploadImageProfile,
+        updateImageProfile, 
         deleteUser } = require('../controllers/');
 
 
@@ -62,6 +65,18 @@ router.delete('/:id',[
     validateFields
 
 ], deleteUser);
+
+
+router.post('/profile',[ 
+    validateFile
+],uploadImageProfile);
+
+
+router.put('/profile/update',[
+    validateJWT,
+    validateFile
+],updateImageProfile);
+
 
 
 module.exports = router;
