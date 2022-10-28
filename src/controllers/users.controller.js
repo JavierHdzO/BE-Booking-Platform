@@ -56,7 +56,7 @@ const getUsers = async(req = request, res = response) => {
     const db = new database();
     try {
         await db.connect();
-        const users = await User.find({role:'USER_MODERADOR_ROLE', status:true});
+        const users = await User.find({role:'USER_MODERATOR_ROLE', status:true});
         await db.disconnect();
 
         res.json({
