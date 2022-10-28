@@ -75,9 +75,40 @@ const getUsers = async(req = request, res = response) => {
 }
 
 const updateUser = async(req = request, res = response) => {
-    res.json({
-        ok:true
-    });
+    console.log("entro a este punto");
+    const { password, status, role, email, ...data } = req.body;
+    const { uid } =  req;
+
+    const db = new database();
+    
+    try {
+        await db.connect();
+        
+        const user = await User.findByIdAndUpdate(uid, data );
+        console.log("entro a este punto");
+        if(!user){
+            return res.status(400).json({
+                ok:false,
+                msg: 'User was not updated'
+            });
+        }
+
+        res.json({
+            ok:true,
+            user
+        });
+
+        await db.disconnect();
+    } catch (error) {
+        console.log(error);
+        await db.disconnect();
+        res.status(500).json({
+            ok:false,
+            msg:'Report this issue the admin'
+        });
+        
+        
+    }
 
 }
 

@@ -49,11 +49,9 @@ router.get('/',[
 ], getUsers);
 
 
-router.put('/:id',[
+router.put('/',[
     validateJWT,
-    checkRole(),
-    check('id', 'Id is incorrect').isMongoId(),
-    validateFields
+    checkRole()
 ], updateUser);
 
 
