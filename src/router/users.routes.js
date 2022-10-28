@@ -51,7 +51,13 @@ router.get('/',[
 
 router.put('/',[
     validateJWT,
-    checkRole()
+    checkRole(),
+    check('name', 'Name is required').not().isEmpty(),
+    check('last_name', 'Lastname is required').not().isEmpty(),
+    check('rfc', 'RFC is required').not().isEmpty(),
+    check('phone', 'Phone is required').not().isEmpty(),
+    check('phone', 'Phone must be a numer').isNumeric(),
+    validateFields
 ], updateUser);
 
 
