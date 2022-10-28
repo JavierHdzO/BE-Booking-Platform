@@ -83,7 +83,6 @@ const updateUser = async(req = request, res = response) => {
     
     try {
         await db.connect();
-        
         const user = await User.findByIdAndUpdate(uid, data );
         console.log("entro a este punto");
         if(!user){
