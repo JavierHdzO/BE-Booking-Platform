@@ -1,4 +1,4 @@
-const { request, response } = require('express');
+const { request, response, json } = require('express');
 
 const database  = require('../database/config');
 const { User }  = require('../models');
@@ -56,7 +56,7 @@ const getUsers = async(req = request, res = response) => {
     const db = new database();
     try {
         await db.connect();
-        const users = await User.find({role:'USER_MODERADOR_ROLE'});
+        const users = await User.find({role:'USER_MODERADOR_ROLE', status:true});
         await db.disconnect();
 
         res.json({
@@ -82,9 +82,40 @@ const updateUser = async(req = request, res = response) => {
 }
 
 const deleteUser = async(req = request, res = response) => {
-    res.json({
-        ok:true
-    });
+    
+    const db = new database();
+    const { id } = req.params;
+
+    try {
+        await db.connect();
+
+        const user = await User.findByIdAndUpdate(id, {status: false})
+
+        if(!user){
+            return res.status(400).json({
+                ok: false,
+                msg: 'User has not been deleted'
+            })
+        }
+
+        await db.disconnect();
+
+        res.json({
+            ok: true,
+            msg: 'User deleted successfuly'
+        });
+    } catch (error) {
+        console.log(error);
+        await db.disconnect();
+        res.status(500).json({
+            ok: false,
+            msg: 'Report this issue the admin'
+        });
+
+    }
+
+
+
 }
 
 const uploadImageProfile = async(req, res) => {

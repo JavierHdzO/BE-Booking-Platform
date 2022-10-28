@@ -59,10 +59,10 @@ router.put('/:id',[
 
 router.delete('/:id',[
     validateJWT,
+    isAdmin,
     check('id','id is incorrect').isMongoId(),
     check('id', '').custom( existsUserById ),
     validateFields
-
 ], deleteUser);
 
 
