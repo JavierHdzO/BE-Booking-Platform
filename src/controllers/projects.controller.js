@@ -11,12 +11,11 @@ const createProject = async (req = request, res = response) => {
     const body = req.body;
     try {
         await db.connect();
-        let project = new Project(body); //new model project instance
+        const project = new Project(body); //new model project instance
         console.log(project);
         await project.save();
         await db.disconnect();
-        res.status(200).json({
-            msg: "created",
+        res.json({
             ok: true,
         });
     } catch (error) {
@@ -31,27 +30,29 @@ const createProject = async (req = request, res = response) => {
 
 const getProjects = async (req = request, res = response) => {
     try {
-        let { id } = req.params;
-        id = mongoose.Types.ObjectId(id);
+        const { id } = req.params;
         await db.connect();
-        const data = await Project.find({ partnerID: [id] }); //gets all projects
+        const data = await Project.find({ partnerID: [id], status: true }); //gets all projects
         await db.disconnect();
 
+        if(!data) return res.status(400).json({
+            msg: "No projects found",
+            ok: false
+        });
+
         if (data.length > 1) {
-            res.status(200).json({
-                msg: "Got it",
+            return res.json({
                 ok: true,
                 data,
             });
-        } else {
-            // console.log(data);
-            res.status(200).json({
-                msg: "Got it",
-                ok: true,
-                data: data[0],
-            });
         }
+        // console.log(data);
+        res.json({
+            ok: true,
+            data: data[0],
+        });
     } catch (error) {
+        await db.disconnect();
         console.log(error);
         res.status(500).json({
             msg: "Report this issue to the admin",
@@ -60,18 +61,24 @@ const getProjects = async (req = request, res = response) => {
     }
 };
 
-const getProject = async(req = request, res = response) => {
-    let { id } = req.params;
+const getProject = async (req = request, res = response) => {
+    const { id } = req.params;
     try {
         await db.connect();
-        let project = await Project.findById(id);
+        const project = await Project.findById(id);
         await db.disconnect();
-        res.status(200).json({
-            msg : "Got it",
-            ok : true,
+
+        if(!project) return res.status(400).json({
+            msg: "No project found",
+            ok: true
+        });
+
+        res.json({
+            ok: true,
             data: project
         });
     } catch (err) {
+        await db.disconnect();
         console.log(err);
         res.status(500).json({
             msg: "Internal error, report this issue to the admin",
@@ -80,17 +87,23 @@ const getProject = async(req = request, res = response) => {
     }
 };
 
-const deleteProject = async(req = request , res = response) =>{
-    let {id} = req.params;
-    try{
+const deleteProject = async (req = request, res = response) => {
+    const { id } = req.params;
+    try {
         await db.connect();
-        await Project.findByIdAndDelete(id);
+        const toDelete = await Project.findByIdAndUpdate(id, {status: false});
         await db.disconnect();
-        res.status(200).json({
-            msg: "Project with id "+id+" deleted",
+
+        if(!toDelete) return res.status(400).json({
+            msg: "User was not disabled",
+            ok: false
+        });
+
+        res.json({
             ok: true,
         });
-    }catch(err){
+    } catch (err) {
+        await db.disconnect();
         console.log(err);
         res.status(500).json({
             msg: "report this issue with the admin",
@@ -99,23 +112,29 @@ const deleteProject = async(req = request , res = response) =>{
     }
 }
 
-const updateProject = async(req = request, res= respone) => {
-    let { id } = req.params;
-    let projectUpdated = req.body;
+const updateProject = async (req = request, res = respone) => {
+    const { id } = req.params;
+    const { _id, partnerID, status, ...projectUpdated } = req.body;
     try {
         await db.connect();
-        await Project.findByIdAndUpdate(id, projectUpdated);
+        const toUpdate = await Project.findByIdAndUpdate(id, projectUpdated);
         await db.disconnect();
+
+        if(!toUpdate) return res.status(400).json({
+            msg: "Project was not updated",
+            ok: false
+        });
 
         res.status(200).json({
             msg: `Project with ${id} was updated`,
             ok: true
         });
     } catch (error) {
+        await db.disconnect();
         console.log(error);
         res.status(500).json({
             msg: "Report this issue to the admin",
-            ok : false
+            ok: false
         });
     }
 }

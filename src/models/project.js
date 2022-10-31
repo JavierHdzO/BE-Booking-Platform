@@ -3,40 +3,40 @@ const { Schema, model } = require("mongoose");
 const projectsSchemma = new Schema({
     partnerID:{
         type: Schema.Types.ObjectId,
-        require: true
+        required: true
     },
     projectName: {
         type: String,
-        require: true,
+        required: true,
     },
     state: {
         type: String,
-        require: true,
+        required: true,
     },
     city: {
         type: String,
-        require: true,
+        required: true,
     },
     address: {
         type: String,
-        require: true,
+        required: true,
     },
     category: {
         type: String,
-        require: true,
+        required: true,
     },
     url: {
         type: String,
-        require: false,
+        required: false,
     },
     status:{
         type: Boolean,
         default: true,
-        require: false
+        required: false
     },
     image:{
         type: String,
-        require: true
+        required: true
     }
 });
 
