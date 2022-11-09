@@ -2,6 +2,7 @@ const path      = require('path');
 
 const express   = require('express');
 const cors      = require('cors');
+const fileupload = require('express-fileupload');
 
 
 
@@ -19,6 +20,7 @@ class Server {
             code: '/api/code',
             token: '/api/token',
             project: '/api/projects'
+
         };
 
         this.middleware();
@@ -36,6 +38,13 @@ class Server {
 
         this.app.use( express.static( path.join( 'src', 'public' )) );
 
+        /**Define config for express-fileupload */
+        this.app.use(fileupload({
+            useTempFiles: true,
+            tempFileDir: path.join(__dirname, '../uploads'),
+            createParentPath: true
+        }));
+        
     }
 
 

@@ -1,5 +1,5 @@
-const role = require("../models/role");
-
+const { Role } = require("../models");
+const database = require("../database/config");
 
 const isAdmin = (req, res, next) => {
 
@@ -18,19 +18,35 @@ const isAdmin = (req, res, next) => {
     next();
 }
 
-const checkRole = (...roles) => {
-
-    return (req, res, next) => {
-
+const checkRole = () => {
+    
+    
+    return async(req, res, next) => {
+        
+        
         if( !req.authUser ) return res.status(400).json({
-            msg:'Does not have required permissions',
-            ok: false
-        });
-
-        if( !roles.includes( req.authUser.role) ) return res.status(400).json({
             msg:'User does not have required permissions',
             ok: false
         });
+        
+        const db =  new database();
+        try {
+            await db.connect();
+            const role = await Role.findOne({role:req.authUser.role});
+            await db.disconnect();
+
+            if( !role ) return res.status(400).json({
+                msg:'User does not have required permissions',
+                ok: false
+            });
+
+        } catch (error) {
+            return res.status(500).json({
+                msg:'Report this problem to the admin',
+                ok: false
+            });
+        }
+        
 
         next();
     }
