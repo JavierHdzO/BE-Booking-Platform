@@ -18,7 +18,9 @@ class Server {
             auth: '/api/auth',
             users: '/api/users',
             code: '/api/code',
-            token: '/api/token'
+            token: '/api/token',
+            project: '/api/projects'
+
         };
 
         this.middleware();
@@ -51,6 +53,7 @@ class Server {
         this.app.use( this.paths.users, require('../router/users.routes') );
         this.app.use( this.paths.code, require('../router/accesscode.routes') );
         this.app.use( this.paths.token, require('../router/token.routes') );
+        this.app.use( this.paths.project, require('../router/project.routes'));
     }
 
 
