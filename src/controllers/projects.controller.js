@@ -5,8 +5,7 @@ const { Project } = require("../models");
 
 const db = new Database(); //new database instance
 
-const createProject = async (req = request, res = response) => {
-    const body = req.body;
+const createProject = async (req, res) => {
 
     const { status, _id, ...data } = req.body;
     try {
@@ -23,7 +22,7 @@ const createProject = async (req = request, res = response) => {
                 msg:"User has not been created"
             });
         }
-
+        
         res.json({
             ok: true,
             project
@@ -51,17 +50,12 @@ const getProjects = async (req = request, res = response) => {
             ok: false
         });
 
-        if (data.length > 1) {
-            return res.json({
-                ok: true,
-                data,
-            });
-        }
-        // console.log(data);
+     
         res.json({
             ok: true,
-            data: data[0],
+            data,
         });
+
     } catch (error) {
         await db.disconnect();
         console.log(error);

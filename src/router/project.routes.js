@@ -1,4 +1,8 @@
 const { Router } = require('express');
+
+
+const { validateJWT, checkRole } = require('../middlewares');
+
 const { createProject,
     getProjects,
     getProject,
@@ -7,7 +11,11 @@ const { createProject,
 
 const router = Router();
 
-router.post('/', createProject);
+router.post('/',[
+    validateJWT,
+    checkRole()
+], createProject);
+
 router.get('/:id/all', getProjects);
 router.get('/:id', getProject);
 router.put('/:id', updateProject);
