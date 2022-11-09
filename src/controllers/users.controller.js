@@ -193,10 +193,6 @@ const updateImageProfile = async(req, res) => {
         
         await db.disconnect();
 
-        /**
-         * Remove file from server
-         */
-
         res.json({
             url: secure_url,
             ok: true
