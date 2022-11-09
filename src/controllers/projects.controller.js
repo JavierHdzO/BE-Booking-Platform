@@ -3,12 +3,21 @@ const Database = require("../database/config");
 const { Project } = require("../models");
 
 
+const { uploadLocalFiles } = require('../helpers');
+
+
 const db = new Database(); //new database instance
 
 const createProject = async (req, res) => {
 
     const { status, _id, ...data } = req.body;
     try {
+
+        
+        const imagesArray =  await uploadLocalFiles(req.files, undefined, 'projects' );
+        
+        console.log( imagesArray );
+
         await db.connect();
 
         const project = new Project(data); //new model project instance
@@ -22,7 +31,7 @@ const createProject = async (req, res) => {
                 msg:"User has not been created"
             });
         }
-        
+
         res.json({
             ok: true,
             project
@@ -32,7 +41,7 @@ const createProject = async (req, res) => {
         console.error(error);
         db.disconnect();
         res.status(500).json({
-            msg: "Report this issue to the admin",
+            msg: error || "Report this issue to the admin",
             ok: false,
         });
     }
