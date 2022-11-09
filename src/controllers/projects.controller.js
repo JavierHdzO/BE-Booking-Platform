@@ -2,22 +2,33 @@ const { response, request } = require("express");
 const Database = require("../database/config");
 const { Project } = require("../models");
 
-const mongoose = require("mongoose");
-const { body } = require("express-validator");
 
 const db = new Database(); //new database instance
 
 const createProject = async (req = request, res = response) => {
     const body = req.body;
+
+    const { status, _id, ...data } = req.body;
     try {
         await db.connect();
-        const project = new Project(body); //new model project instance
-        console.log(project);
+
+        const project = new Project(data); //new model project instance
         await project.save();
+
         await db.disconnect();
+
+        if( !project ){
+            return res.status(400).json({
+                ok:false,
+                msg:"User has not been created"
+            });
+        }
+
         res.json({
             ok: true,
+            project
         });
+        
     } catch (error) {
         console.error(error);
         db.disconnect();

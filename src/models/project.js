@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
 
-const projectsSchemma = new Schema({
+const projectSchemma = new Schema({
     partnerID:{
         type: Schema.Types.ObjectId,
         required: true
     },
-    projectName: {
+    name: {
         type: String,
         required: true,
     },
@@ -34,10 +34,18 @@ const projectsSchemma = new Schema({
         default: true,
         required: false
     },
-    image:{
-        type: String,
+    images:{
+        type: Schema.Types.Array,
         required: true
     }
 });
 
-module.exports = model('Project', projectsSchemma);
+projectSchemma.methods.toJSON = function () {
+    const { __v, _id, status, ...project } = this.toObject();
+    project["id"] = _id;
+    return project;
+    
+}
+
+
+module.exports = model('Project', projectSchemma);
