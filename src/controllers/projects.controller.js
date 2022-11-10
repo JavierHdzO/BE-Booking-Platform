@@ -3,7 +3,7 @@ const Database = require("../database/config");
 const { Project } = require("../models");
 
 
-const { uploadLocalFiles } = require('../helpers');
+const { uploadLocalFiles, uploadCloudinaryFiles, removeLocalFiles } = require('../helpers');
 
 
 const db = new Database(); //new database instance
@@ -15,9 +15,14 @@ const createProject = async (req, res) => {
 
         
         const imagesArray =  await uploadLocalFiles(req.files, undefined, 'projects' );
-        
-        console.log( imagesArray );
 
+        const images = await uploadCloudinaryFiles( imagesArray );
+
+        removeLocalFiles( imagesArray );
+        
+        data["images"] = images;
+
+        
         await db.connect();
 
         const project = new Project(data); //new model project instance

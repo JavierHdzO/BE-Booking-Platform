@@ -11,10 +11,7 @@ const { createProject,
 
 const router = Router();
 
-router.post('/',[
-    // validateJWT,
-    // checkRole()
-], createProject);
+router.post('/', createProject);
 
 router.get('/:id/all', getProjects);
 router.get('/:id', getProject);
