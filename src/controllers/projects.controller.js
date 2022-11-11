@@ -59,10 +59,10 @@ const getProjects = async (req = request, res = response) => {
         const { uid } = req;
 
         await db.connect();
-        const data = await Project.find({partnerID:uid, status: true}); //gets all projects
+        const projects = await Project.find({partnerID:uid, status: true}); //gets all projects
         await db.disconnect();
 
-        if(!data) return res.status(400).json({
+        if(!projects) return res.status(400).json({
             msg: "Projects not found",
             ok: false
         });
@@ -70,7 +70,7 @@ const getProjects = async (req = request, res = response) => {
      
         res.json({
             ok: true,
-            data,
+            projects,
         });
 
     } catch (error) {
