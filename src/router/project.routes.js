@@ -1,4 +1,8 @@
 const { Router } = require('express');
+
+
+const { validateJWT, checkRole } = require('../middlewares');
+
 const { createProject,
     getProjects,
     getProject,
@@ -7,10 +11,22 @@ const { createProject,
 
 const router = Router();
 
-router.post('/', createProject);
-router.get('/:id/all', getProjects);
+router.post('/',[
+    validateJWT,
+    checkRole()
+], createProject);
+
+router.get('/',[
+    validateJWT,
+    checkRole()
+], getProjects);
+
 router.get('/:id', getProject);
 router.put('/:id', updateProject);
-router.delete('/:id', deleteProject);
+
+router.delete('/:id',[
+    validateJWT,
+    checkRole()
+], deleteProject);
 
 module.exports = router;
