@@ -11,11 +11,22 @@ const { createProject,
 
 const router = Router();
 
-router.post('/', createProject);
+router.post('/',[
+    validateJWT,
+    checkRole()
+], createProject);
 
-router.get('/:id/all', getProjects);
+router.get('/',[
+    validateJWT,
+    checkRole()
+], getProjects);
+
 router.get('/:id', getProject);
 router.put('/:id', updateProject);
-router.delete('/:id', deleteProject);
+
+router.delete('/:id',[
+    validateJWT,
+    checkRole()
+], deleteProject);
 
 module.exports = router;

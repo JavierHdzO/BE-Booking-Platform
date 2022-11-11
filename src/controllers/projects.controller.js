@@ -22,7 +22,9 @@ const createProject = async (req, res) => {
         
         data["images"] = images;
 
-        
+        const { uid } = req;
+        data["partnerID"] = uid;
+
         await db.connect();
 
         const project = new Project(data); //new model project instance
@@ -54,13 +56,14 @@ const createProject = async (req, res) => {
 
 const getProjects = async (req = request, res = response) => {
     try {
-        const { id } = req.params;
+        const { uid } = req;
+
         await db.connect();
-        const data = await Project.find({ partnerID: [id], status: true }); //gets all projects
+        const data = await Project.find({partnerID:uid, status: true}); //gets all projects
         await db.disconnect();
 
         if(!data) return res.status(400).json({
-            msg: "No projects found",
+            msg: "Projects not found",
             ok: false
         });
 
@@ -81,21 +84,23 @@ const getProjects = async (req = request, res = response) => {
 };
 
 const getProject = async (req = request, res = response) => {
+    const { uid } = req;
     const { id } = req.params;
     try {
         await db.connect();
-        const project = await Project.findById(id);
+        const project = await Project.findOne({partnerID: uid, _id:id, status: true});
         await db.disconnect();
 
         if(!project) return res.status(400).json({
-            msg: "No project found",
-            ok: true
+            msg: "Project not found",
+            ok: false
         });
 
         res.json({
             ok: true,
             data: project
         });
+
     } catch (err) {
         await db.disconnect();
         console.log(err);
@@ -107,19 +112,24 @@ const getProject = async (req = request, res = response) => {
 };
 
 const deleteProject = async (req = request, res = response) => {
+    const { uid } = req;
     const { id } = req.params;
     try {
         await db.connect();
-        const toDelete = await Project.findByIdAndUpdate(id, {status: false});
+        const project = await Project.findOne({partnerID: uid, _id:id});
+        console.log(project);
+        project.status = false;
+        await project.save();
         await db.disconnect();
 
-        if(!toDelete) return res.status(400).json({
-            msg: "User was not disabled",
+        if(!project) return res.status(400).json({
+            msg: "Project not found",
             ok: false
         });
 
         res.json({
             ok: true,
+            project
         });
     } catch (err) {
         await db.disconnect();

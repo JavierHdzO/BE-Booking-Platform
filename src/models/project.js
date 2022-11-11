@@ -3,6 +3,7 @@ const { Schema, model } = require("mongoose");
 const projectSchemma = new Schema({
     partnerID:{
         type: Schema.Types.ObjectId,
+        ref:'User',
         required: true
     },
     name: {
