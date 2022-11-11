@@ -2,8 +2,9 @@ const { Schema, model } = require('mongoose');
 
 
 const developmentSchema = new Schema({
-    project:{
+    projectID:{
         type: Schema.Types.ObjectId,
+        ref:"Project",
         required: true
     },
     description:{
@@ -29,6 +30,10 @@ const developmentSchema = new Schema({
     images:{
         type: Schema.Types.Array,
         required: true
+    },
+    status:{
+        type: Boolean,
+        default: true
     }
 
 });

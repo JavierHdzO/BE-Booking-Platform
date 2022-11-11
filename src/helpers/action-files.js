@@ -18,6 +18,7 @@ const uploadLocalFile = ( files, extensionsAllowed = ['jpn', 'jpg', 'jpeg','png'
     
 
         if( !extensionsAllowed.includes(extension)){
+            console.log("marcando error");
             return reject(`File extension is not allowed, try with this extensions ${extensionsAllowed}`);
             
         }

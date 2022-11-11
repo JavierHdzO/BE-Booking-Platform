@@ -1,5 +1,7 @@
 const { Router } = require('express');
 
+const { validateJWT, checkRole } = require('../middlewares');
+
 const { createDevelopment, 
         getDevelopment, 
         getDevelopments, 
@@ -10,9 +12,11 @@ const router = Router();
 
 router.post('/', createDevelopment);
 
-router.get('/',getDevelopments);
+router.get('/',[ validateJWT, 
+                 checkRole() ], getDevelopments);
 
-router.get('/:id', getDevelopment);
+router.get('/:id',[ validateJWT, 
+                    checkRole()], getDevelopment);
 
 router.put('/:id', updateDevelopment);
 

@@ -38,7 +38,11 @@ const projectSchemma = new Schema({
     images:{
         type: Schema.Types.Array,
         required: true
-    }
+    },
+    developments:[{
+        type: Schema.Types.ObjectId,
+        ref:'Development'
+    }]
 });
 
 projectSchemma.methods.toJSON = function () {
