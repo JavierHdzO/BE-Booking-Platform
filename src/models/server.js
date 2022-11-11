@@ -19,7 +19,8 @@ class Server {
             users: '/api/users',
             code: '/api/code',
             token: '/api/token',
-            project: '/api/projects'
+            project: '/api/projects',
+            development:'/api/developments'
 
         };
 
@@ -54,6 +55,7 @@ class Server {
         this.app.use( this.paths.code, require('../router/accesscode.routes') );
         this.app.use( this.paths.token, require('../router/token.routes') );
         this.app.use( this.paths.project, require('../router/project.routes'));
+        this.app.use( this.paths.development, require('../router/development.routes'));
     }
 
 
