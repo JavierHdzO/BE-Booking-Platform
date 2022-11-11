@@ -142,13 +142,10 @@ const deleteProject = async (req = request, res = response) => {
 }
 
 const updateProject = async (req = request, res = respone) => {
-    const { uid } = req;
-    const { id } = req.params;
+    
     const { _id, partnerID, status, ...projectUpdated } = req.body;
 
     
-
-
     try {
         await db.connect();
         const toUpdate = await Project.findByIdAndUpdate(id, projectUpdated);
